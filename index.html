@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Datafication Ideation Card Deck</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 0;
+        background: #f0f0f0;
+        text-align: center;
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      .deck {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        justify-content: center;
+        justify-items: center;
+        margin: 0 3rem;
+        gap: 20px;
+        margin-top: 20px;
+      }
+      .card {
+        width: 22vw;
+        height: 60vh;
+        max-height: 70vh;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #333;
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: italic;
+        font-size: 2rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        padding: 1rem 1.4rem;
+      } /* Different background colours for each category */
+      .form {
+        background-color: #f8e1f4;
+      }
+      .dataset {
+        background-color: #e1f8e8;
+      }
+      .story {
+        background-color: #e1e8f8;
+      }
+      .card a {
+        color: #0056b3;
+        text-decoration: none;
+      }
+      .card a:hover {
+        text-decoration: underline;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+           #shuffle {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        font-size: 2rem;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 1000;
+      }
+      #shuffle:hover {
+        background: #f0f0f0;
+      }
+      @keyframes shake {
+        0% { transform: translateX(0); }
+        20% { transform: translateX(-8px); }
+        40% { transform: translateX(8px); }
+        60% { transform: translateX(-8px); }
+        80% { transform: translateX(8px); }
+        100% { transform: translateX(0); }
+      }
+        #shuffle.shake {
+          animation: shake 0.4s;
+        }
+        @keyframes flip {
+          0% { transform: perspective(400px) rotateY(0deg); }
+          30% { transform: perspective(400px) rotateY(18deg); }
+          50% { transform: perspective(400px) rotateY(-18deg); }
+          70% { transform: perspective(400px) rotateY(10deg); }
+          100% { transform: perspective(400px) rotateY(0deg); }
+        }
+        .card.flip {
+          animation: flip 0.5s;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>!Daten (Spiel) & Zeit Generator</h1>
+
+    <div class="deck">
+      <div class="card form" id="card-form">
+        <p id="form-content"></p>
+      </div>
+      <div class="card dataset" id="card-dataset">
+        <p id="dataset-content"></p>
+      </div>
+      <div class="card story" id="card-story">
+        <p id="story-content"></p>
+      </div>
+    </div>
+    <div class="deck">
+      <h3>Form</h3>
+      <h3>Datensatz</h3>
+      <h3>Story</h3>
+    </div>
+    <br />
+    <button id="shuffle" title="Shuffle Cards">🎲</button>
+    <div id="summary-sentence" style="position:fixed;left:0;right:0;bottom:0;padding:1rem;background:#fffbe6;color:#333;font-size:1.3rem;box-shadow:0 -2px 8px rgba(0,0,0,0.08);z-index:999;text-align:center;"></div>
+    <style>
+ 
+    </style>
+ 
+    </style>
+    <script>
+      // Arrays for the three categories
+
+      // Forms: simple strings
+      const forms = [
+        "interactive website/graph",
+        "simulation",
+        "video essay",
+        "cartography",
+        "game",
+        "interactive installation",
+        "augmented reality experience",
+        "data sculpture",
+        "physical-digital hybrid",
+      ];
+
+      // Datasets are objects with name and resource URL.
+      const datasets = [
+        {
+          name: "nasa-stories",
+          resource: "https://www.nasa.gov/history/afj/index.html",
+        },
+        { name: "flight-stats", resource: "https://www.flightradar24.com" },
+        { name: "weather-stats", resource: "https://openweathermap.org" },
+        {
+          name: "Global Forest Watch",
+          resource: "https://www.globalforestwatch.org",
+        },
+        {
+          name: "Portrait gallery of curious Lucerne residents",
+          resource: "https://zenodo.org/records/13450935",
+        },
+        {
+          name: "environmental data",
+          resource: "https://data.worldbank.org/topic/environment",
+        },
+        { name: "cultural metrics", resource: "https://www.statista.com" },
+      ];
+
+      // Stories: simple strings
+      const stories = [
+        "raising awareness",
+        "speculating on truth",
+        "imagining new realities",
+        "providing a ludic experience",
+        "educating on a specific issue",
+        "learning something new",
+        "critiquing surveillance culture",
+        "exploring power dynamics",
+        "merging fictional and factual narratives",
+        "uncovering hidden patterns",
+      ];
+
+      // Utility function to pick a random item from an array.
+      function randomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      // Function to update cards randomly.
+      function shuffleCards() {
+        // Random selection for Form
+        const randomForm = randomItem(forms);
+        document.getElementById("form-content").textContent = randomForm;
+
+        // Random selection for Dataset (an object)
+        const randomDataset = randomItem(datasets);
+        // For dataset, display as clickable link.
+        const datasetElem = document.getElementById("dataset-content");
+        datasetElem.innerHTML = `<a href="${randomDataset.resource}" target="_blank">${randomDataset.name}</a>`;
+
+        // Random selection for Story
+        const randomStory = randomItem(stories);
+        document.getElementById("story-content").textContent = randomStory;
+
+          // Update summary sentence at bottom
+          const summaryDiv = document.getElementById("summary-sentence");
+          summaryDiv.textContent = `Create a ${randomForm} with ${randomDataset.name} that is ${randomStory}`;
+      }
+
+      // Shuffle immediately on page load.
+      shuffleCards();
+
+      // Shuffle every time button is clicked.
+      document
+        .getElementById("shuffle")
+        .addEventListener("click", shuffleCards);
+
+        // Add shake animation on button click, flip on cards
+        const shuffleBtn = document.getElementById("shuffle");
+        const cardEls = document.querySelectorAll('.card');
+        shuffleBtn.addEventListener("click", function () {
+          // But zton shake
+          shuffleBtn.classList.remove("shake");
+          void shuffleBtn.offsetWidth;
+          shuffleBtn.classList.add("shake");
+          // Cards flip
+          cardEls.forEach(card => {
+            card.classList.remove("flip");
+            void card.offsetWidth;
+            card.classList.add("flip");
+          });
+          // Remove animation classes after animation ends
+          setTimeout(() => {
+            shuffleBtn.classList.remove("shake");
+            cardEls.forEach(card => card.classList.remove("flip"));
+          }, 500);
+        });
+    </script>
+
+  </body>
+</html>
