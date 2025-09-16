@@ -109,20 +109,20 @@
 
     <div class="deck">
       <div class="card form" id="card-form">
-        <p id="form-content"></p>
+        <p id="form-content">_____________</p>
       </div>
       <div class="card dataset" id="card-dataset">
-        <p id="dataset-content"></p>
+        <p id="dataset-content">_____________</p>
       </div>
       <div class="card story" id="card-story">
-        <p id="story-content"></p>
+        <p id="story-content">_____________</p>
       </div>
     </div>
-    <div class="deck">
+    <!-- <div class="deck">
       <h3>Form</h3>
       <h3>Datensatz</h3>
       <h3>Story</h3>
-    </div>
+    </div> -->
     <br />
     <button id="shuffle" title="Shuffle Cards">🎲</button>
     <div id="summary-sentence" style="position:fixed;left:0;right:0;bottom:0;padding:1rem;background:#fffbe6;color:#333;font-size:1.3rem;box-shadow:0 -2px 8px rgba(0,0,0,0.08);z-index:999;text-align:center;"></div>
@@ -167,7 +167,7 @@
           name: "environmental data",
           resource: "https://data.worldbank.org/topic/environment",
         },
-        { name: "cultural metrics", resource: "https://www.statista.com" },
+        { name: "cultural museum objects", resource: "https://collections.geneve.ch/meg/catalogue/en/musinfo00.php?dpt=ETHEU" },
       ];
 
       // Stories: simple strings
@@ -210,8 +210,7 @@
           summaryDiv.textContent = `Create a ${randomForm} with ${randomDataset.name} that is ${randomStory}`;
       }
 
-      // Shuffle immediately on page load.
-      shuffleCards();
+  // Do not shuffle immediately on page load. Cards will be empty until shuffle is clicked.
 
       // Shuffle every time button is clicked.
       document
